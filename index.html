@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC Agrícola - Início</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="shortcut icon" href="imagens/Logo_nova.png" type="image/x-icon">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .navbar {
+            background-color: #004d26;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #f29c28 !important; 
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important; 
+            font-weight: bold;
+        }
+
+        .info-section h3 {
+            color: #004d26;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+        }
+
+        .info-item h5 {
+            font-weight: bold;
+            color: #004d26;
+        }
+
+        .promo-img {
+            width: 100%;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        footer {
+            background-color: #004d26;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        footer a {
+            color: #f29c28;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="imagens/Logo_nova.png" alt="Logo" class="me-2" style="height: 40px;">
+                <span>ABC Agrícola</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="sobre.html">Sobre a ABC</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contato.html">Contato</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <img src="imagens/Linhas.jpg" width="100%" height="45px">
+
+    <div class="container my-5 info-section">
+        <div class="row">
+            <h3>Cotações - <span id="dataAtual"></span></h3>
+
+            <div class="col-md-6">
+
+                <div class="info-item">
+                    <h5>Cotação de Sementes</h5>
+                    <p>Soja: <strong id="cotacaoSoja">Carregando...</strong></p>
+                    <p>Milho: <strong id="cotacaoMilho">Carregando...</strong></p>
+                    <p>Trigo: <strong id="cotacaoTrigo">Carregando...</strong></p>
+                </div>
+
+                <div class="info-item">
+                    <h5>Previsão do Tempo</h5>
+                    <p id="tempoHoje">Carregando...</p>
+                    <p id="tempoTerca">Carregando...</p>
+                    <p id="tempoQuarta">Carregando...</p>
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+                <img src="imagens/BG-meio.png" alt="Promoção ABC" class="promo-img">
+                <div class="info-item mt-5">
+                    <h5>Cotação do Dólar</h5>
+                    <p>BRL/USD: <strong id="cotacaoDolar">Carregando...</strong></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("dataAtual").innerText = new Date().toLocaleDateString("pt-BR");
+
+        const alphaVantageApiKey = 'SUA_CHAVE_DE_API_DO_ALPHAVANTAGE';
+        
+        const openWeatherApiKey = 'SUA_CHAVE_DE_API_OPENWEATHERMAP';
+        const cidade = 'Coronel Bicaco'; 
+
+        async function obterCotacoes() {
+            try {
+                const resposta = await fetch(`https://www.alphavantage.co/query?function=COMMODITY_EXCHANGE_RATE&from_symbol=SOYA&to_symbol=BRL&apikey=${alphaVantageApiKey}`);
+                const dados = await resposta.json();
+                document.getElementById('cotacaoSoja').innerText = `R$ ${dados['Time Series (Daily)']['2024-11-18']['4. close']}`;
+                
+            } catch (erro) {
+                console.error("Erro ao obter as cotações:", erro);
+            }
+        }
+
+        async function obterPrevisaoDoTempo() {
+            try {
+                const resposta = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${cidade}&appid=${openWeatherApiKey}&units=metric&lang=pt_br`);
+                const dados = await resposta.json();
+
+                const hoje = dados.list[0];
+                document.getElementById('tempoHoje').innerText = `Hoje: ${hoje.main.temp_max}° / ${hoje.main.temp_min}° (Chuva: ${hoje.rain ? hoje.rain['3h'] : 0}mm, Umidade: ${hoje.main.humidity}%)`;
+
+                const terca = dados.list[8]; 
+                document.getElementById('tempoTerca').innerText = `Terça: ${terca.main.temp_max}° / ${terca.main.temp_min}° (Chuva: ${terca.rain ? terca.rain['3h'] : 0}mm, Umidade: ${terca.main.humidity}%)`;
+                
+                const quarta = dados.list[16]; 
+                document.getElementById('tempoQuarta').innerText = `Quarta: ${quarta.main.temp_max}° / ${quarta.main.temp_min}° (Chuva: ${quarta.rain ? quarta.rain['3h'] : 0}mm, Umidade: ${quarta.main.humidity}%)`;
+            } catch (erro) {
+                console.error("Erro ao obter a previsão do tempo:", erro);
+            }
+        }
+
+        async function obterCotacaoDolar() {
+            try {
+                const resposta = await fetch(`https://api.exchangerate-api.com/v4/latest/USD`);
+                const dados = await resposta.json();
+                document.getElementById('cotacaoDolar').innerText = `R$ ${dados.rates.BRL.toFixed(2)}`;
+            } catch (erro) {
+                console.error("Erro ao obter a cotação do dólar:", erro);
+            }
+        }
+
+        window.onload = () => {
+            obterCotacoes();
+            obterPrevisaoDoTempo();
+            obterCotacaoDolar();
+        };
+    </script>
+
+    <footer>
+        <div class="container">
+            <p>© 2024 ABC Agrícola. Todos os direitos reservados. <a href="#">Política de Privacidade</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
