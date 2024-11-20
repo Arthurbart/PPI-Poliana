@@ -68,80 +68,79 @@
         footer a:hover {
             text-decoration: underline;
         }
+
+        .tudo {
+            min-height: 100vh;
+        }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="imagens/Logo_nova.png" alt="Logo" class="me-2" style="height: 40px;">
-                <span>ABC Agrícola</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Início</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="sobre.html">Sobre a ABC</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contato.html">Contato</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <img src="imagens/Linhas.jpg" width="100%" height="45px">
-
-    <div class="container my-5 info-section">
-        <div class="row">
-            <h3>Cotações - <span id="dataAtual"></span></h3>
-
-            <div class="col-md-6">
-
-                <div class="info-item">
-                    <h5>Cotação de Sementes</h5>
-                    <p>Soja: <strong id="cotacaoSoja">Carregando...</strong></p>
-                    <p>Milho: <strong id="cotacaoMilho">Carregando...</strong></p>
-                    <p>Trigo: <strong id="cotacaoTrigo">Carregando...</strong></p>
-                </div>
-
-                <div class="info-item">
-                    <h5>Previsão do Tempo</h5>
-                    <p id="tempoHoje">Carregando...</p>
-                    <p id="tempoTerca">Carregando...</p>
-                    <p id="tempoQuarta">Carregando...</p>
-                </div>
-
-            </div>
-
-            <div class="col-md-6">
-                <img src="imagens/BG-meio.png" alt="Promoção ABC" class="promo-img">
-                <div class="info-item mt-5">
-                    <h5>Cotação do Dólar</h5>
-                    <p>BRL/USD: <strong id="cotacaoDolar">Carregando...</strong></p>
+    <div class="tudo">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="imagens/Logo_nova.png" alt="Logo" class="me-2" style="height: 40px;">
+                    <span>ABC Agrícola</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="index.html">Início</a>
+                        </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="sobre.html">Sobre a ABC</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contato.html">Contato</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-
+        </nav>
+        <img src="imagens/Linhas.jpg" width="100%" height="45px">
+        <div class="container my-5 info-section">
+            <div class="row">
+                <h3>Cotações - <span id="dataAtual"></span></h3>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <h5>Cotação de Sementes</h5>
+                        <p>Soja: <strong id="cotacaoSoja">Carregando...</strong></p>
+                        <p>Milho: <strong id="cotacaoMilho">Carregando...</strong></p>
+                        <p>Trigo: <strong id="cotacaoTrigo">Carregando...</strong></p>
+                    </div>
+                    <div class="info-item">
+                        <h5>Previsão do Tempo</h5>
+                        <p id="tempoHoje">Carregando...</p>
+                        <p id="tempoTerca">Carregando...</p>
+                        <p id="tempoQuarta">Carregando...</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <img src="imagens/BG-meio.png" alt="Promoção ABC" class="promo-img">
+                    <div class="info-item mt-5">
+                        <h5>Cotação do Dólar</h5>
+                        <p>BRL/USD: <strong id="cotacaoDolar">Carregando...</strong></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         document.getElementById("dataAtual").innerText = new Date().toLocaleDateString("pt-BR");
 
-        const alphaVantageApiKey = 'SUA_CHAVE_DE_API_DO_ALPHAVANTAGE';
+        const alphaVantageApiKey = 'FBB5TQ36A9ICAPXX';
         
-        const openWeatherApiKey = 'SUA_CHAVE_DE_API_OPENWEATHERMAP';
+        const openWeatherApiKey = '634a6adc373f0c89dfbb67d173730d8d';
         const cidade = 'Coronel Bicaco'; 
 
         async function obterCotacoes() {
             try {
-                const resposta = await fetch(`https://www.alphavantage.co/query?function=COMMODITY_EXCHANGE_RATE&from_symbol=SOYA&to_symbol=BRL&apikey=${alphaVantageApiKey}`);
+                const resposta = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=SOYBEAN&apikey=FBB5TQ36A9ICAPXX`);
                 const dados = await resposta.json();
                 document.getElementById('cotacaoSoja').innerText = `R$ ${dados['Time Series (Daily)']['2024-11-18']['4. close']}`;
                 
